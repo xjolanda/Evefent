@@ -14,7 +14,7 @@ public class EventProfile {
     @Path("/geteventprofile")
     // Produces JSON as response
     @Produces(MediaType.APPLICATION_JSON) 
-    // Query parameters are parameters: http://localhost/<appln-folder-name>/eventprofile/geteventprofile?event_id=0001
+    // Query parameters are parameters: http://localhost/<appln-folder-name>/eventprofile/geteventprofile?event_id=1
     public String getEventProfile(@QueryParam("event_id") int event_id){
     	System.out.println("Inside getEventProfile");
         String response = "";

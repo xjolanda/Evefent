@@ -18,7 +18,7 @@ public class DBConnection {
         Connection con = null;
         try {
             Class.forName(Constants.dbClass).newInstance();
-            con = DriverManager.getConnection(Constants.dbUrl + "?user=root&password=COMP489/490");
+            con = DriverManager.getConnection(Constants.dbUrl + "?user="+Constants.dbUser + "&password=" + Constants.dbPassword);
             System.out.println("Database connection success");
         } catch (Exception e) {
         	System.out.println("Database connection failure");
