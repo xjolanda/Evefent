@@ -12,4 +12,6 @@
     <string name="EventProfile_AttendeesListID">event_attendeesListID</string>
     <string name="EventProfile_Validated">validated</string>
 
+    <string name="EventProfilesEnumeratedMessage">EventProfilesEnumerated</string>
+
 </resources>
