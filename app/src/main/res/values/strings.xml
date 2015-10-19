@@ -13,5 +13,6 @@
     <string name="EventProfile_Validated">validated</string>
 
     <string name="EventProfilesEnumeratedMessage">EventProfilesEnumerated</string>
+    <string name="EventUpdatedMessage">EventUpdated</string>
 
 </resources>
