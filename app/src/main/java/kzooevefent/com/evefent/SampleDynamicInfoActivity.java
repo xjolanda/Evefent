@@ -10,6 +10,9 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +34,7 @@ import java.util.ArrayList;
  */
 
 
-public class SampleDynamicInfoActivity extends Activity
+public class SampleDynamicInfoActivity extends FragmentActivity
 {
     ArrayList<EventProfile> currentProfiles = new ArrayList<EventProfile>();
 
@@ -64,11 +67,14 @@ public class SampleDynamicInfoActivity extends Activity
         }
     };
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setUpView();
+        setUpFragment();
 
         /*
         * The LocalBroadcastManager will register your activity as a listener for a specific message from DatabaseServices.
@@ -92,6 +98,16 @@ public class SampleDynamicInfoActivity extends Activity
         * */
         LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseProfileEnumerationMessageReceiver,
                 new IntentFilter(getApplicationContext().getResources().getString(R.string.EventProfilesEnumeratedMessage)));
+    }
+
+    void setUpView(){
+        setContentView(R.layout.activity_home);
+    }
+    void setUpFragment(){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        SlidingFragment fragment = new SlidingFragment();
+        transaction.replace(R.id.sample_content_fragment, fragment);
+        transaction.commit();
     }
 
     @Override
