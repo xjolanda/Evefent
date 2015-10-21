@@ -15,4 +15,7 @@
     <string name="EventProfilesEnumeratedMessage">EventProfilesEnumerated</string>
     <string name="EventUpdatedMessage">EventUpdated</string>
 
+    <string name="Regis">Register</string>
+    <string name="RegisterCode">Enter registration code</string>
+
 </resources>
