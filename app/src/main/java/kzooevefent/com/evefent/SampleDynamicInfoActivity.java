@@ -48,13 +48,14 @@ public class SampleDynamicInfoActivity extends Activity
         public void onServiceConnected(ComponentName className,
                                        IBinder service)
         {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
+          /*  // We've bound to LocalService, cast the IBinder and get LocalService instance
             DatabaseServices.DatabaseBinder binder = (DatabaseServices.DatabaseBinder) service;
             dbService = binder.getService(); //Store reference to the instance of the service that we bound to.
             dbBound = true;
 
             dbService.enumerateEventProfiles(); //Sample data request. TODO: Replace with appropriate calls to info that you want
             Toast.makeText(getApplicationContext(), "Database Services Requested", Toast.LENGTH_SHORT).show(); //TODO:Debug
+            */
         }
 
         @Override
@@ -98,8 +99,8 @@ public class SampleDynamicInfoActivity extends Activity
     protected void onStart()
     {
         super.onStart();
-        /*
-        * To trigger your requests from onServiceConnected, the activity needs to bind to the service.
+        
+        /* To trigger your requests from onServiceConnected, the activity needs to bind to the service.
         * It will make calls to Database methods and then unbind.
         * TODO: Include this code anytime you want to trigger onServiceConnected request code
         * */

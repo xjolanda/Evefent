@@ -9,16 +9,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
-        <activity
-            android:name=".SampleDynamicInfoActivity"
-            android:label="@string/app_name" >
+        <activity android:name=".RegistrationScreen"
+            android:label="RegistrationScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN">
+                </action>
+                <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
+
+        <activity android:name=".SampleDynamicInfoActivity"
+            android:label="SampleDynamicInfoActivity"></activity>
 
         <service android:name=".DatabaseServices"
                  android:enabled="true"
