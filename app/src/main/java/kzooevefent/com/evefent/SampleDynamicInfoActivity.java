@@ -34,6 +34,7 @@ import java.util.ArrayList;
 public class SampleDynamicInfoActivity extends Activity
 {
     ArrayList<EventProfile> currentProfiles = new ArrayList<EventProfile>();
+    ArrayList<ScheduleElement> currentSchedule = new ArrayList<ScheduleElement>();
 
     DatabaseServices dbService; //The database service instance the activity binds to.
     boolean dbBound = false; //Is the activity bound to the service
@@ -53,7 +54,8 @@ public class SampleDynamicInfoActivity extends Activity
             dbService = binder.getService(); //Store reference to the instance of the service that we bound to.
             dbBound = true;
 
-            dbService.enumerateEventProfiles(); //Sample data request. TODO: Replace with appropriate calls to info that you want
+            //dbService.getAllEventProfiles(); //Sample data request. TODO: Replace with appropriate calls to info that you want
+            dbService.getSchedule(0);
             Toast.makeText(getApplicationContext(), "Database Services Requested", Toast.LENGTH_SHORT).show(); //TODO:Debug
         }
 
@@ -91,7 +93,10 @@ public class SampleDynamicInfoActivity extends Activity
         *        new IntentFilter(getApplicationContext().getResources().getString(R.string.EventGPSUpdateMessageEnumeratedMessage)));
         * */
         LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseProfileEnumerationMessageReceiver,
-                new IntentFilter(getApplicationContext().getResources().getString(R.string.EventProfilesEnumeratedMessage)));
+            new IntentFilter(getApplicationContext().getResources().getString(R.string.EventArrayMessage)));
+        LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseScheduleElementMessageReceiver,
+                new IntentFilter(getApplicationContext().getResources().getString(R.string.ScheduleElementMessage)));
+
     }
 
     @Override
@@ -149,7 +154,7 @@ public class SampleDynamicInfoActivity extends Activity
         {
             Toast.makeText(context, "Broadcast Received, Attempting Reassembly", Toast.LENGTH_SHORT).show();//TODO:Debug
             //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
-            ArrayList<EventProfile> updatedProfiles = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.EventProfilesEnumeratedMessage));
+            ArrayList<EventProfile> updatedProfiles = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.EventArrayMessage));
 
             if (updatedProfiles == null)
             {
@@ -163,6 +168,38 @@ public class SampleDynamicInfoActivity extends Activity
             for (EventProfile e : currentProfiles)
             {
                 Toast.makeText(context, "Event Created: " + e.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
+            }
+
+            //TODO: Make sure to update the display after info has been updated
+            /*
+            * Example call to imaginary method:
+            * UpdateEventPictures(currentProfiles);
+            * */
+        }
+    };
+
+    private BroadcastReceiver DatabaseScheduleElementMessageReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Toast.makeText(context, "Broadcast Received, Attempting Reassembly", Toast.LENGTH_SHORT).show();//TODO:Debug
+            //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
+            ArrayList<ScheduleElement> elements = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.ScheduleElementMessage));
+
+            if (elements == null)
+            {
+                Toast.makeText(context, "Reassembly Failure, Probable Extra Error", Toast.LENGTH_SHORT).show();//TODO:Debug
+            } else
+            {
+                Toast.makeText(context, "Reassembly Success", Toast.LENGTH_SHORT).show();//TODO:Debug
+            }
+
+            currentSchedule = elements;
+
+            for (ScheduleElement e : currentSchedule)
+            {
+                Toast.makeText(context, "Schedule Element Created: " + e.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
             }
 
             //TODO: Make sure to update the display after info has been updated

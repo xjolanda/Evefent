@@ -12,7 +12,9 @@
     <string name="EventProfile_AttendeesListID">event_attendeesListID</string>
     <string name="EventProfile_Validated">validated</string>
 
-    <string name="EventProfilesEnumeratedMessage">EventProfilesEnumerated</string>
-    <string name="EventUpdatedMessage">EventUpdated</string>
+    <string name="EventArrayMessage">EvenArray</string>
+    <string name="EventMessage">Event</string>
+    <string name="GPSCoordsMessage">GPSCoords</string>
+    <string name="ScheduleElementMessage">SchdeulElement</string>
 
 </resources>

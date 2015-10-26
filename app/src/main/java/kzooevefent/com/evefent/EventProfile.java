@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Author: Jakob Rodseth
  * Date: 10/13/2015
- *
+ * <p/>
  * TODO: Documentation
  */
 public class EventProfile implements Parcelable
@@ -18,10 +18,10 @@ public class EventProfile implements Parcelable
 
     public EventProfile(int id, String name, int attendeeListID, Boolean validated)
     {
-        setProfile(id, name, attendeeListID, validated);
+        setParameters(id, name, attendeeListID, validated);
     }
 
-    protected void setProfile(int id, String name, int attendeeListID, Boolean validated)
+    protected void setParameters(int id, String name, int attendeeListID, Boolean validated)
     {
         this.id = id;
         this.name = name;
