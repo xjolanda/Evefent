@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import kzooevefent.com.evefent.R;
 
 
 public class RegistrationScreen extends Activity {
@@ -44,6 +43,7 @@ public class RegistrationScreen extends Activity {
 
             dbService.enumerateEventProfiles(); //Sample data request. TODO: Replace with appropriate calls to info that you want
             Toast.makeText(getApplicationContext(), "Database Services Requested", Toast.LENGTH_SHORT).show(); //TODO:Debug
+            System.out.println("Do the thing");
         }
 
         @Override
@@ -59,7 +59,7 @@ public class RegistrationScreen extends Activity {
         setContentView(R.layout.activity_registration_screen);
         Reg = (EditText) findViewById(R.id.Reg);
         Reg.setBackgroundColor(Color.parseColor("#734C8F"));
-        System.out.println("running");
+        System.out.println("Do the second thing");
 
         /*
         * The LocalBroadcastManager will register your activity as a listener for a specific message from DatabaseServices.
