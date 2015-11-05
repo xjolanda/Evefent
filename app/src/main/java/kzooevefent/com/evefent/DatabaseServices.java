@@ -29,7 +29,7 @@ public class DatabaseServices extends Service
 {
     private final IBinder mBinder = new DatabaseBinder();
     int eventsDBVersion;//TODO:Implement versioning
-    private boolean debug = true;//if true, service will generate dummy info. True for development
+    private boolean debug = false;//if true, service will generate dummy info. True for development
 
     public class DatabaseBinder extends Binder
     {
@@ -77,35 +77,37 @@ public class DatabaseServices extends Service
             sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Profiles", generateDummyEvents());
             return;
         }
-
-        queryAllEventProfiles(new OnJSONResponseCallback()
+        else
         {
-            @Override
-            public void onJSONResponse(boolean success, Context context, JSONObject response)//TODO: Create JSON parsing utility, clean up code
+            queryAllEventProfiles(new OnJSONResponseCallback()
             {
-                ArrayList<EventProfile> profiles = new ArrayList<EventProfile>();
-                try
+                @Override
+                public void onJSONResponse(boolean success, Context context, JSONObject response)//TODO: Create JSON parsing utility, clean up code
                 {
-                    int size = response.getInt("size");
-                    for (int i = 0; i < size; i++)//TODO:Create JSON assembly utility
+                    ArrayList<EventProfile> profiles = new ArrayList<EventProfile>();
+                    try
                     {
-                        JSONObject receivedEventProfile = new JSONObject(response.getString(String.valueOf(i)));
+                        int size = response.getInt("size");
+                        for (int i = 0; i < size; i++)//TODO:Create JSON assembly utility
+                        {
+                            JSONObject receivedEventProfile = new JSONObject(response.getString(String.valueOf(i)));
 
-                        EventProfile newEventProfile = new EventProfile(receivedEventProfile.getInt(context.getString(R.string.EventProfile_ID)),
-                                receivedEventProfile.getString(context.getString(R.string.EventProfile_Name)),
-                                receivedEventProfile.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
-                                receivedEventProfile.getBoolean(context.getString(R.string.EventProfile_Validated)));
-                        profiles.add(i, newEventProfile);
+                            EventProfile newEventProfile = new EventProfile(receivedEventProfile.getInt(context.getString(R.string.EventProfile_ID)),
+                                    receivedEventProfile.getString(context.getString(R.string.EventProfile_Name)),
+                                    receivedEventProfile.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                                    receivedEventProfile.getBoolean(context.getString(R.string.EventProfile_Validated)));
+                            profiles.add(i, newEventProfile);
 
+                        }
+                        //Toast.makeText(context, "Events Enumerated", Toast.LENGTH_LONG).show();
+                        sendMessage(getApplicationContext().getResources().getString(R.string.EventArrayMessage), "Broadcasting Profiles", profiles);
+                    } catch (JSONException e)
+                    {
+                        Toast.makeText(context, "Parsing Error, " + e.getMessage(), Toast.LENGTH_LONG).show();//TODO:Debug
                     }
-                    //Toast.makeText(context, "Events Enumerated", Toast.LENGTH_LONG).show();
-                    sendMessage(getApplicationContext().getResources().getString(R.string.EventArrayMessage), "Broadcasting Profiles", profiles);
-                } catch (JSONException e)
-                {
-                    Toast.makeText(context, "Parsing Error, " + e.getMessage(), Toast.LENGTH_LONG).show();//TODO:Debug
                 }
-            }
-        });
+            });
+        }
 
     }
 
@@ -160,18 +162,21 @@ public class DatabaseServices extends Service
                     sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Profile", generateDummyEvent(event_id));
                     return;
                 }
-                try
+                else
                 {
-                    EventProfile event = new EventProfile(response.getInt(context.getString(R.string.EventProfile_ID)),
-                            response.getString(context.getString(R.string.EventProfile_Name)),
-                            response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
-                            response.getBoolean(context.getString(R.string.EventProfile_Validated)));
+                    try
+                    {
+                        EventProfile event = new EventProfile(response.getInt(context.getString(R.string.EventProfile_ID)),
+                                response.getString(context.getString(R.string.EventProfile_Name)),
+                                response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                                response.getBoolean(context.getString(R.string.EventProfile_Validated)));
 
-                    sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Profile", event);
-                } catch (JSONException e)
-                {
-                    Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
-                    //TODO: Catch format error
+                        sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Profile", event);
+                    } catch (JSONException e)
+                    {
+                        Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+                        //TODO: Catch format error
+                    }
                 }
             }
         });
@@ -305,15 +310,15 @@ public class DatabaseServices extends Service
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(HTTPSrequest, params, new AsyncHttpResponseHandler()
         {
-            // When the response returned by REST has Http response code '200'
             @Override
-            public void onSuccess(String response)
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] bytes)
             {
                 // Hide Progress Dialog
                 //prgDialog.hide();
                 try
                 {
                     // JSON Object
+                    String response = new String(bytes);
                     JSONObject obj = new JSONObject(response);
                     // When the JSON response has validation status set to true
                     Toast.makeText(getApplicationContext(), "Data Received", Toast.LENGTH_SHORT).show();//TODO:Debug
@@ -330,10 +335,8 @@ public class DatabaseServices extends Service
                 }
             }
 
-            // When the response returned by REST has Http response code other than '200'
             @Override
-            public void onFailure(int statusCode, Throwable error,
-                                  String content)
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable)
             {
                 // Hide Progress Dialog
                 //prgDialog.hide();
@@ -353,6 +356,21 @@ public class DatabaseServices extends Service
                     Toast.makeText(getApplicationContext(), "Unexpected Error occurred! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();//TODO:Debug
                 }
             }
+
+           /* // When the response returned by REST has Http response code '200'
+            @Override
+            public void onSuccess(String response)
+            {
+
+            }
+
+            // When the response returned by REST has Http response code other than '200'
+            @Override
+            public void onFailure(int statusCode, Throwable error,
+                                  String content)
+            {
+
+            }*/
         });
     }
 

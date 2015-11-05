@@ -54,8 +54,8 @@ public class SampleDynamicInfoActivity extends Activity
             dbService = binder.getService(); //Store reference to the instance of the service that we bound to.
             dbBound = true;
 
-            //dbService.getAllEventProfiles(); //Sample data request. TODO: Replace with appropriate calls to info that you want
-            dbService.getSchedule(0);
+            dbService.getAllEventProfiles(); //Sample data request. TODO: Replace with appropriate calls to info that you want
+            //dbService.getSchedule(0);
             Toast.makeText(getApplicationContext(), "Database Services Requested", Toast.LENGTH_SHORT).show(); //TODO:Debug
         }
 
