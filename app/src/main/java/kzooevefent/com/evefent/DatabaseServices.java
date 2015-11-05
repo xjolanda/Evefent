@@ -69,7 +69,24 @@ public class DatabaseServices extends Service
     /*
         * Public methods
         * */
-    public void getAllEventProfiles()
+
+    public void addEvent (Event event)
+    {
+        String name = event.getName();
+        RequestParams params = new RequestParams();
+
+        params.put("event_name", name);
+        invokeWebServices(params, getString(R.string.addEventURL), new OnJSONResponseCallback()
+        {
+            @Override
+            public void onJSONResponse(boolean success, Context context, JSONObject response)
+            {
+                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getAllEvents()
     {
         if (debug)
         {
@@ -79,24 +96,24 @@ public class DatabaseServices extends Service
         }
         else
         {
-            queryAllEventProfiles(new OnJSONResponseCallback()
+            queryAllEvents(new OnJSONResponseCallback()
             {
                 @Override
                 public void onJSONResponse(boolean success, Context context, JSONObject response)//TODO: Create JSON parsing utility, clean up code
                 {
-                    ArrayList<EventProfile> profiles = new ArrayList<EventProfile>();
+                    ArrayList<Event> profiles = new ArrayList<Event>();
                     try
                     {
                         int size = response.getInt("size");
                         for (int i = 0; i < size; i++)//TODO:Create JSON assembly utility
                         {
-                            JSONObject receivedEventProfile = new JSONObject(response.getString(String.valueOf(i)));
+                            JSONObject receivedEvent = new JSONObject(response.getString(String.valueOf(i)));
 
-                            EventProfile newEventProfile = new EventProfile(receivedEventProfile.getInt(context.getString(R.string.EventProfile_ID)),
-                                    receivedEventProfile.getString(context.getString(R.string.EventProfile_Name)),
-                                    receivedEventProfile.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
-                                    receivedEventProfile.getBoolean(context.getString(R.string.EventProfile_Validated)));
-                            profiles.add(i, newEventProfile);
+                            Event newEvent = new Event(receivedEvent.getInt(context.getString(R.string.EventProfile_ID)),
+                                    receivedEvent.getString(context.getString(R.string.EventProfile_Name)),
+                                    //receivedEvent.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                                    receivedEvent.getBoolean(context.getString(R.string.EventProfile_Validated)));
+                            profiles.add(i, newEvent);
 
                         }
                         //Toast.makeText(context, "Events Enumerated", Toast.LENGTH_LONG).show();
@@ -111,29 +128,29 @@ public class DatabaseServices extends Service
 
     }
 
-    public void updateAllEventProfiles(final ArrayList<EventProfile> existingProfiles)
+    public void updateAllEvents (final ArrayList<Event> existingProfiles)
     {
 
         if (queryDBVersion()) //if DB has been updated, check for differences and update TODO: Update instead of overwrite
         {
-            queryAllEventProfiles(new OnJSONResponseCallback()
+            queryAllEvents(new OnJSONResponseCallback()
             {
                 @Override
                 public void onJSONResponse(boolean success, Context context, JSONObject response)//TODO: Create JSON parsing utility, clean up code
                 {
-                    ArrayList<EventProfile> profiles = new ArrayList<EventProfile>();
+                    ArrayList<Event> profiles = new ArrayList<Event>();
                     try
                     {
                         int size = response.getInt("size");
                         for (int i = 0; i < size; i++)
                         {
-                            JSONObject receivedEventProfile = new JSONObject(response.getString(String.valueOf(i)));
+                            JSONObject receivedEvent = new JSONObject(response.getString(String.valueOf(i)));
 
-                            EventProfile newEventProfile = new EventProfile(receivedEventProfile.getInt(context.getString(R.string.EventProfile_ID)),
-                                    receivedEventProfile.getString(context.getString(R.string.EventProfile_Name)),
-                                    receivedEventProfile.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
-                                    receivedEventProfile.getBoolean(context.getString(R.string.EventProfile_Validated)));
-                            profiles.add(i, newEventProfile);
+                            Event newEvent = new Event(receivedEvent.getInt(context.getString(R.string.EventProfile_ID)),
+                                    receivedEvent.getString(context.getString(R.string.EventProfile_Name)),
+                                    //receivedEventProfile.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                                    receivedEvent.getBoolean(context.getString(R.string.EventProfile_Validated)));
+                            profiles.add(i, newEvent);
                             Toast.makeText(context, "Event Created: " + profiles.get(i).toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
 
                         }
@@ -149,9 +166,9 @@ public class DatabaseServices extends Service
         }
     }
 
-    public void getEventProfile(final int event_id)
+    public void getEvent (final int event_id)
     {
-        queryEventProfile(event_id, new DatabaseServices.OnJSONResponseCallback()
+        queryEvent (event_id, new DatabaseServices.OnJSONResponseCallback()
         {
             @Override
             public void onJSONResponse(boolean success, Context context, JSONObject response)
@@ -166,9 +183,9 @@ public class DatabaseServices extends Service
                 {
                     try
                     {
-                        EventProfile event = new EventProfile(response.getInt(context.getString(R.string.EventProfile_ID)),
+                        Event event = new Event(response.getInt(context.getString(R.string.EventProfile_ID)),
                                 response.getString(context.getString(R.string.EventProfile_Name)),
-                                response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                                //response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
                                 response.getBoolean(context.getString(R.string.EventProfile_Validated)));
 
                         sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Profile", event);
@@ -240,7 +257,7 @@ public class DatabaseServices extends Service
     * Private methods
     * */
 
-    private void queryEventProfile(int event_id, final OnJSONResponseCallback callback)
+    private void queryEvent(int event_id, final OnJSONResponseCallback callback)
     {
         RequestParams params = new RequestParams();
         if (validateEventID(event_id))
@@ -252,7 +269,7 @@ public class DatabaseServices extends Service
         }
     }
 
-    private void queryAllEventProfiles(final OnJSONResponseCallback callback)
+    private void queryAllEvents (final OnJSONResponseCallback callback)
     {
         // Put Http parameter name with value of event_id
         RequestParams params = new RequestParams();
@@ -379,21 +396,21 @@ public class DatabaseServices extends Service
         public void onJSONResponse(boolean success, Context context, JSONObject response);
     }
 
-    private ArrayList<EventProfile> generateDummyEvents()
+    private ArrayList<Event> generateDummyEvents()
     {
-        ArrayList<EventProfile> dArray = new ArrayList<EventProfile>();
+        ArrayList<Event> dArray = new ArrayList<Event>();
 
         for (int i = 0; i < 10; i++)
         {
-            dArray.add(new EventProfile(i, "Event " + i, i + 10, false));
+            dArray.add(new Event(i, "Event " + i, false));
         }
 
         return dArray;
     }
 
-    private EventProfile generateDummyEvent(int eventID)
+    private Event generateDummyEvent(int eventID)
     {
-        return new EventProfile(eventID, "Dummy Event", eventID + 10, false);
+        return new Event(eventID, "Dummy Event", false);
     }
 
 }

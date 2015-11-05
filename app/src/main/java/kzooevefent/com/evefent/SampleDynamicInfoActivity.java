@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Author: Jakob Rodseth
  * Date: 10/15/2015
  *
- * This is an example bound activity that requests an ArrayList of EventProfile objects
+ * This is an example bound activity that requests an ArrayList of Event objects
  * from DatabaseServices.
  *
  * Use this as a template to add database communication to your activity.
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 public class SampleDynamicInfoActivity extends Activity
 {
-    ArrayList<EventProfile> currentProfiles = new ArrayList<EventProfile>();
+    ArrayList<Event> currentProfiles = new ArrayList<Event>();
     ArrayList<ScheduleElement> currentSchedule = new ArrayList<ScheduleElement>();
 
     DatabaseServices dbService; //The database service instance the activity binds to.
@@ -54,7 +54,7 @@ public class SampleDynamicInfoActivity extends Activity
             dbService = binder.getService(); //Store reference to the instance of the service that we bound to.
             dbBound = true;
 
-            dbService.getAllEventProfiles(); //Sample data request. TODO: Replace with appropriate calls to info that you want
+            dbService.getAllEvents(); //Sample data request. TODO: Replace with appropriate calls to info that you want
             //dbService.getSchedule(0);
             Toast.makeText(getApplicationContext(), "Database Services Requested", Toast.LENGTH_SHORT).show(); //TODO:Debug
         }
@@ -154,7 +154,7 @@ public class SampleDynamicInfoActivity extends Activity
         {
             Toast.makeText(context, "Broadcast Received, Attempting Reassembly", Toast.LENGTH_SHORT).show();//TODO:Debug
             //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
-            ArrayList<EventProfile> updatedProfiles = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.EventArrayMessage));
+            ArrayList<Event> updatedProfiles = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.EventArrayMessage));
 
             if (updatedProfiles == null)
             {
@@ -165,7 +165,7 @@ public class SampleDynamicInfoActivity extends Activity
             }
 
             currentProfiles = updatedProfiles;
-            for (EventProfile e : currentProfiles)
+            for (Event e : currentProfiles)
             {
                 Toast.makeText(context, "Event Created: " + e.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
             }

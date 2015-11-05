@@ -9,23 +9,23 @@ import android.os.Parcelable;
  * <p/>
  * TODO: Documentation
  */
-public class EventProfile implements Parcelable
+public class Event implements Parcelable
 {
     private int id;
     private String name;
-    private int attendeeListID;
+    //private int attendeeListID;
     private boolean validated;
 
-    public EventProfile(int id, String name, int attendeeListID, Boolean validated)
+    public Event(int id, String name, Boolean validated)
     {
-        setParameters(id, name, attendeeListID, validated);
+        setParameters(id, name, validated);
     }
 
-    protected void setParameters(int id, String name, int attendeeListID, Boolean validated)
+    protected void setParameters(int id, String name, Boolean validated)
     {
         this.id = id;
         this.name = name;
-        this.attendeeListID = attendeeListID;
+        //this.attendeeListID = attendeeListID;
         this.validated = validated;
     }
 
@@ -47,12 +47,11 @@ public class EventProfile implements Parcelable
 
     /**
      * @return the attendeeListID
-     */
     public int getAttendeeListID()
     {
         return attendeeListID;
     }
-
+*/
     /**
      * @return the validated
      */
@@ -65,7 +64,7 @@ public class EventProfile implements Parcelable
     {
         String s = "Event " + this.name
                 + "\nID: " + this.id
-                + "\tAttendee List ID: " + this.attendeeListID
+                //+ "\tAttendee List ID: " + this.attendeeListID
                 + "\t Validation: " + this.validated;
         return s;
     }
@@ -79,21 +78,24 @@ public class EventProfile implements Parcelable
     {
         out.writeInt(id);
         out.writeString(name);
-        out.writeInt(attendeeListID);
+       // out.writeInt(attendeeListID);
         out.writeByte((byte) (validated ? 1 : 0));
     }
 
-    public Parcelable.Creator<EventProfile> CREATOR
-            = new Parcelable.Creator<EventProfile>()
+    public Parcelable.Creator<Event> CREATOR
+            = new Parcelable.Creator<Event>()
     {
-        public EventProfile createFromParcel(Parcel in)
+        public Event createFromParcel(Parcel in)
         {
-            return new EventProfile(in.readInt(), in.readString(), in.readInt(), (in.readByte() != 0));
+            return new Event(in.readInt(),
+                    in.readString(),
+                    //in.readInt(),
+                    (in.readByte() != 0));
         }
 
-        public EventProfile[] newArray(int size)
+        public Event[] newArray(int size)
         {
-            return new EventProfile[size];
+            return new Event[size];
         }
 
     };
