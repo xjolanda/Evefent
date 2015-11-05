@@ -1,5 +1,7 @@
 package com.kzooevefent.jersey;
 
+import java.util.ArrayList;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
  
@@ -30,7 +32,8 @@ public class Utility {
         try {
         	obj.put("event_id", event.getId());
             obj.put("event_name", event.getName());
-            obj.put("even_attendeesListID", event.getAttendeeListID());
+            //obj.put("event_attendeesListID", event.getAttendeeListID());
+            obj.put("validated", event.isValidated());
         } catch (JSONException e) {
             // TODO Auto-generated catch block
         }
@@ -49,10 +52,46 @@ public class Utility {
         try {
         	obj.put("event_id", event.getId());
             obj.put("event_name", event.getName());
-            obj.put("event_attendeesListID", event.getAttendeeListID());
+            //obj.put("event_attendeesListID", event.getAttendeeListID());
+            obj.put("validated", event.isValidated());
             obj.put("error_msg", err_msg);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
+        }
+        return obj.toString();
+    }
+    
+    public static String constructJSONForEventArray(ArrayList<Event> events) {
+        JSONObject obj = new JSONObject();
+        int i = 0;
+        for(Event e: events)
+        {
+        	System.out.println(i);
+        	try {
+            	obj.put(""+i, constructJSONForEvent(e));
+            } catch (JSONException e1) 
+        	{
+            	/*try {  
+            		System.out.println("Enumeration Error");
+            	obj.put("index", i);
+            	obj.put("e", constructJSONForEvent(e, e1.getMessage()));
+                // TODO Auto-generated catch block
+            	}
+            	catch(JSONException e2)
+            	{
+            		System.out.println("Enumeration Error");
+            		//TODO:handle this
+            	}*/
+            }
+        	i++;
+        }
+        try
+        {
+        obj.put("size", i);
+        }
+        catch(JSONException e)
+        {
+        	
         }
         return obj.toString();
     }

@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
  
 public class DBConnection {
     /**
@@ -36,17 +37,10 @@ public class DBConnection {
      * @return
      * @throws Exception
      */
-    
-    public static boolean enumerateEvents() throws Exception
-    {
-    	//TODO:Create method
-    	
-		return false;//TODO: change to real value
-    }
-    
-    public static Event validateEvent(int event_id) throws Exception {
+        
+    public static Event queryEvent(int event_id) throws Exception {
     	System.out.println("Inside validateEvent");
-    	Event event = new Event(0, "", 0, false);
+    	Event event = new Event(0, "", "false");
         Connection dbConn = null;
         //validatingEvent
         try {
@@ -57,14 +51,14 @@ public class DBConnection {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            System.out.println("Querying for event");
             Statement stmt = dbConn.createStatement();
+            System.out.println("Querying for event");
             String query = "SELECT * FROM events WHERE event_id = " + event_id;
             System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 //System.out.println(rs.getString(1) + rs.getString(2) + rs.getString(3));
-            	event = new Event(rs.getInt(1), rs.getString(2),rs.getInt(3), true);
+            	event = new Event(rs.getInt(1), rs.getString(2),rs.getString(3));
             }
         } catch (SQLException sqle) {
         	System.out.println("Database Query Error");
@@ -83,6 +77,125 @@ public class DBConnection {
         }
         return event;
     }    
+    
+    public static ArrayList<Event> enumerateEvents() throws Exception {
+    	System.out.println("Inside validateEvents");
+    	ArrayList<Event> events = new ArrayList<Event>();
+        Connection dbConn = null;
+        //validatingEvent
+        try {
+            try {
+            	System.out.println("Attempting database connection");
+                dbConn = DBConnection.createConnection();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Statement stmt = dbConn.createStatement();
+            System.out.println("Querying for events");
+            String query = "SELECT * FROM events";
+            System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            
+
+            while (rs.next()) 
+            {
+            	events.add(new Event(rs.getInt(1), rs.getString(2),rs.getString(3)));
+            }
+        } catch (SQLException sqle) {
+        	System.out.println("Database Query Error");
+        	System.out.println(sqle.toString());
+            throw sqle;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            if (dbConn != null) {
+                dbConn.close();
+            }
+            throw e;
+        } finally {
+            if (dbConn != null) {
+                dbConn.close();
+            }
+        }
+        return events;
+    }   
+    public static boolean insertEvent(Event event) throws SQLException, Exception {
+        boolean insertStatus = false;
+        Connection dbConn = null;
+        try {
+            try {
+                dbConn = DBConnection.createConnection();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Statement stmt = dbConn.createStatement();
+            String query = "INSERT into events(event_id, event_name, event_validated) values('" + event.getId() +"','" + event.getName()+ "','true')";
+            //System.out.println(query);
+            int records = stmt.executeUpdate(query);
+            //System.out.println(records);
+            //When record is successfully inserted
+            if (records > 0) {
+                insertStatus = true;
+            }
+        } catch (SQLException sqle) {
+            //sqle.printStackTrace();
+        	System.out.println(sqle.getMessage());
+            throw sqle;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            // TODO Auto-generated catch block
+            if (dbConn != null) {
+                dbConn.close();
+            }
+            throw e;
+        } finally {
+            if (dbConn != null) {
+                dbConn.close();
+            }
+        }
+        return insertStatus;
+    }
+    public static int getMaxID() throws SQLException, Exception
+    {
+    	Connection dbConn = null;
+    	int maxID = -1;
+        try {
+            try {
+                dbConn = DBConnection.createConnection();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Statement stmt = dbConn.createStatement();
+            String query = "SELECT MAX(event_id)FROM events";
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            //System.out.println(records);
+            //When record is successfully inserted
+            if (rs.next()) {
+                maxID = rs.getInt(1);                
+            }
+        } catch (SQLException sqle) {
+            //sqle.printStackTrace();
+        	System.out.println(sqle.getMessage());
+            throw sqle;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            // TODO Auto-generated catch block
+            if (dbConn != null) {
+                dbConn.close();
+            }
+            throw e;
+        } finally {
+            if (dbConn != null) {
+                dbConn.close();
+            }
+        }
+        return maxID;
+    	
+    }
+
     
     /*
     /**
