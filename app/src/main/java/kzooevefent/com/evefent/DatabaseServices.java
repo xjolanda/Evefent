@@ -86,6 +86,41 @@ public class DatabaseServices extends Service
         });
     }
 
+    public void updateEvent (int eid, Event newEvent)
+    {
+        int id = eid;
+        String name = newEvent.getName();
+        RequestParams params = new RequestParams();
+
+        params.put("event_id", id);
+        params.put("event_name", name);
+        invokeWebServices(params, getString(R.string.updateEventURL), new OnJSONResponseCallback()
+        {
+            @Override
+            public void onJSONResponse(boolean success, Context context, JSONObject response)
+            {
+                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void removeEvent (int eid)
+    {
+        int id = eid;
+        RequestParams params = new RequestParams();
+
+        params.put("event_id", id);
+        invokeWebServices(params, getString(R.string.removeEventURL), new OnJSONResponseCallback()
+        {
+            @Override
+            public void onJSONResponse(boolean success, Context context, JSONObject response)
+            {
+                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     public void getAllEvents()
     {
         if (debug)
@@ -128,7 +163,7 @@ public class DatabaseServices extends Service
 
     }
 
-    public void updateAllEvents (final ArrayList<Event> existingProfiles)
+    public void updateAllLocalEvents(final ArrayList<Event> existingProfiles)
     {
 
         if (queryDBVersion()) //if DB has been updated, check for differences and update TODO: Update instead of overwrite
@@ -402,7 +437,7 @@ public class DatabaseServices extends Service
 
         for (int i = 0; i < 10; i++)
         {
-            dArray.add(new Event(i, "Event " + i, false));
+            dArray.add(new Event(i, "Event " + i, true));
         }
 
         return dArray;
@@ -410,7 +445,7 @@ public class DatabaseServices extends Service
 
     private Event generateDummyEvent(int eventID)
     {
-        return new Event(eventID, "Dummy Event", false);
+        return new Event(eventID, "Dummy Event", true);
     }
 
 }

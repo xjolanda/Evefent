@@ -7,6 +7,8 @@
     <string name="getEventUrl">http://192.168.1.98:8080/EvefentServer/eventoperations/getevent</string>
     <string name="getAllEventsUrl">http://192.168.1.98:8080/EvefentServer/eventoperations/getallevents</string>
     <string name="addEventURL">http://192.168.1.98:8080/EvefentServer/eventoperations/addevent</string>
+    <string name="updateEventURL">http://192.168.1.98:8080/EvefentServer/eventoperations/updateevent</string>
+    <string name="removeEventURL">http://192.168.1.98:8080/EvefentServer/eventoperations/removeevent</string>
 
     <string name="EventProfile_Name">event_name</string>
     <string name="EventProfile_ID">event_id</string>
