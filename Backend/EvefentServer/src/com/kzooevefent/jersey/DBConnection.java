@@ -235,6 +235,48 @@ public class DBConnection {
         return removeStatus;
     }
     
+    public static boolean insertImage(WebScraping.Image image) throws SQLException, Exception {
+        boolean insertStatus = false;
+        Connection dbConn = null;
+        try {
+            try {
+                dbConn = DBConnection.createConnection();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Statement stmt = dbConn.createStatement();
+            String query = "INSERT into images(image_id, image_url) values('" 
+            + image.name 
+            +"','" 
+            + image.source 
+            + "')";
+            System.out.println(query);
+            int records = stmt.executeUpdate(query);
+            //System.out.println(records);
+            //When record is successfully inserted
+            if (records > 0) {
+                insertStatus = true;
+            }
+        } catch (SQLException sqle) {
+            //sqle.printStackTrace();
+        	System.out.println(sqle.getMessage());
+            throw sqle;
+        } catch (Exception e) {
+            //e.printStackTrace();
+            // TODO Auto-generated catch block
+            if (dbConn != null) {
+                dbConn.close();
+            }
+            throw e;
+        } finally {
+            if (dbConn != null) {
+                dbConn.close();
+            }
+        }
+        return insertStatus;
+    }
+    
     public static int getMaxID() throws SQLException, Exception
     {
     	Connection dbConn = null;

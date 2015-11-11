@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
@@ -81,6 +82,21 @@ public class DatabaseServices extends Service
             @Override
             public void onJSONResponse(boolean success, Context context, JSONObject response)
             {
+
+                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                try
+                {
+                    Event event = new Event(response.getInt(context.getString(R.string.Event_ID)),
+                            response.getString(context.getString(R.string.Event_Name)),
+                            //response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                            response.getBoolean(context.getString(R.string.Event_Validated)));
+
+                    sendMessage(getApplicationContext().getResources().getString(R.string.AddedEventMessage), "Broadcasting Added Event", event);
+                } catch (JSONException e)
+                {
+                    Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+                    //TODO: Catch format error
+                }
                 Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -100,6 +116,20 @@ public class DatabaseServices extends Service
             public void onJSONResponse(boolean success, Context context, JSONObject response)
             {
                 Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                try
+                {
+                    Event event = new Event(response.getInt(context.getString(R.string.Event_ID)),
+                            response.getString(context.getString(R.string.Event_Name)),
+                            //response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                            response.getBoolean(context.getString(R.string.Event_Validated)));
+
+                    sendMessage(getApplicationContext().getResources().getString(R.string.UpdatedEventMessage), "Broadcasting Updated Event", event);
+                } catch (JSONException e)
+                {
+                    Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+                    //TODO: Catch format error
+                }
+                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -116,6 +146,19 @@ public class DatabaseServices extends Service
             public void onJSONResponse(boolean success, Context context, JSONObject response)
             {
                 Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                try
+                {
+                    Event event = new Event(response.getInt(context.getString(R.string.Event_ID)),
+                            response.getString(context.getString(R.string.Event_Name)),
+                            //response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
+                            response.getBoolean(context.getString(R.string.Event_Validated)));
+
+                    sendMessage(getApplicationContext().getResources().getString(R.string.RemovedEventMessage), "Broadcasting Removed Event", event);
+                } catch (JSONException e)
+                {
+                    Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
+                    //TODO: Catch format error
+                }
             }
         });
     }
@@ -144,10 +187,11 @@ public class DatabaseServices extends Service
                         {
                             JSONObject receivedEvent = new JSONObject(response.getString(String.valueOf(i)));
 
-                            Event newEvent = new Event(receivedEvent.getInt(context.getString(R.string.EventProfile_ID)),
-                                    receivedEvent.getString(context.getString(R.string.EventProfile_Name)),
+
+                            Event newEvent = new Event(receivedEvent.getInt(context.getString(R.string.Event_ID)),
+                                    receivedEvent.getString(context.getString(R.string.Event_Name)),
                                     //receivedEvent.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
-                                    receivedEvent.getBoolean(context.getString(R.string.EventProfile_Validated)));
+                                    receivedEvent.getBoolean(context.getString(R.string.Event_Validated)));
                             profiles.add(i, newEvent);
 
                         }
@@ -161,6 +205,36 @@ public class DatabaseServices extends Service
             });
         }
 
+    }
+
+    public void getScrapedImages(String url, boolean addToDatabase)
+    {
+            scrapeImages(url, addToDatabase, new OnJSONResponseCallback()
+            {
+                @Override
+                public void onJSONResponse(boolean success, Context context, JSONObject response)//TODO: Create JSON parsing utility, clean up code
+                {
+                    ArrayList<Image> images = new ArrayList<Image>();
+                    try
+                    {
+                        int size = response.getInt("size");
+                        for (int i = 0; i < size; i++)//TODO:Create JSON assembly utility
+                        {
+                            JSONObject receivedImage = new JSONObject(response.getString(String.valueOf(i)));
+
+                           Image newImage = new Image(receivedImage.getString(context.getString(R.string.Image_Source)),
+                                    receivedImage.getString(context.getString(R.string.Image_Name)));
+                            images.add(i, newImage);
+
+                        }
+                        //Toast.makeText(context, "Events Enumerated", Toast.LENGTH_LONG).show();
+                        sendMessage(getApplicationContext().getResources().getString(R.string.ImageArrayMessage), "Broadcasting Images", images);
+                    } catch (JSONException e)
+                    {
+                        Toast.makeText(context, "Parsing Error, " + e.getMessage(), Toast.LENGTH_LONG).show();//TODO:Debug
+                    }
+                }
+            });
     }
 
     public void updateAllLocalEvents(final ArrayList<Event> existingProfiles)
@@ -181,10 +255,10 @@ public class DatabaseServices extends Service
                         {
                             JSONObject receivedEvent = new JSONObject(response.getString(String.valueOf(i)));
 
-                            Event newEvent = new Event(receivedEvent.getInt(context.getString(R.string.EventProfile_ID)),
-                                    receivedEvent.getString(context.getString(R.string.EventProfile_Name)),
+                            Event newEvent = new Event(receivedEvent.getInt(context.getString(R.string.Event_ID)),
+                                    receivedEvent.getString(context.getString(R.string.Event_Name)),
                                     //receivedEventProfile.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
-                                    receivedEvent.getBoolean(context.getString(R.string.EventProfile_Validated)));
+                                    receivedEvent.getBoolean(context.getString(R.string.Event_Validated)));
                             profiles.add(i, newEvent);
                             Toast.makeText(context, "Event Created: " + profiles.get(i).toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
 
@@ -211,19 +285,19 @@ public class DatabaseServices extends Service
                 if (debug)
                 {
                     Toast.makeText(context, "Debug is on, generating dummy event", Toast.LENGTH_SHORT).show();
-                    sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Profile", generateDummyEvent(event_id));
+                    sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Event", generateDummyEvent(event_id));
                     return;
                 }
                 else
                 {
                     try
                     {
-                        Event event = new Event(response.getInt(context.getString(R.string.EventProfile_ID)),
-                                response.getString(context.getString(R.string.EventProfile_Name)),
+                        Event event = new Event(response.getInt(context.getString(R.string.Event_ID)),
+                                response.getString(context.getString(R.string.Event_Name)),
                                 //response.getInt(context.getString(R.string.EventProfile_AttendeesListID)),
-                                response.getBoolean(context.getString(R.string.EventProfile_Validated)));
+                                response.getBoolean(context.getString(R.string.Event_Validated)));
 
-                        sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Profile", event);
+                        sendMessage(getApplicationContext().getResources().getString(R.string.EventMessage), "Broadcasting Event", event);
                     } catch (JSONException e)
                     {
                         Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show();
@@ -291,6 +365,18 @@ public class DatabaseServices extends Service
     /*
     * Private methods
     * */
+    private void scrapeImages(String url, boolean addToDatabase, final OnJSONResponseCallback callback)
+    {
+        RequestParams params = new RequestParams();
+
+            // Put Http parameter name with value of event_id
+        params.put("url", String.valueOf(url));
+        params.put("addToDatabase", String.valueOf(addToDatabase));
+            // Invoke RESTful Web Service with Http parameters
+        invokeWebServices(params, getString(R.string.scrapeImagesURL), callback); //TODO: Don't hardcode calls
+
+    }
+
 
     private void queryEvent(int event_id, final OnJSONResponseCallback callback)
     {
@@ -448,4 +534,51 @@ public class DatabaseServices extends Service
         return new Event(eventID, "Dummy Event", true);
     }
 
+    public class Image implements Parcelable
+    {
+        public String name;
+        public String source;
+
+        public Image(String source, String name)
+        {
+            this.source = source;
+            this.name = name;
+
+        }
+        public int describeContents()
+        {
+            return 0;
+        }
+
+        public void writeToParcel(Parcel out, int flags)
+        {
+            out.writeString(source);
+            out.writeString(name);
+        }
+
+        @Override
+        public String toString()
+        {
+            String s = "Image name: "
+                    + name
+                    + ", Image Source: "
+                    + source;
+            return s;
+        }
+
+        public Parcelable.Creator<Image> CREATOR
+                = new Parcelable.Creator<Image>()
+        {
+            public Image createFromParcel(Parcel in)
+            {
+                return new Image(in.readString(), in.readString());
+            }
+
+            public Image[] newArray(int size)
+            {
+                return new Image[size];
+            }
+
+        };
+    }
 }

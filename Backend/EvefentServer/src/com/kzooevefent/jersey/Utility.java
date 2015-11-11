@@ -95,5 +95,53 @@ public class Utility {
         }
         return obj.toString();
     }
+    
+    public static String constructJSONForImage(WebScraping.Image image) {
+        JSONObject obj = new JSONObject();
+        try {
+        	obj.put("image_source", image.source);
+            obj.put("image_name", image.name);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+        }
+        return obj.toString();
+    }
+    
+    
+    public static String constructJSONfForImageArray(ArrayList<WebScraping.Image> images)
+    {
+    	JSONObject obj = new JSONObject();
+    	int j = 0;
+        for(WebScraping.Image i: images)
+        {
+        	System.out.println(j);
+        	try {
+            	obj.put(""+j, constructJSONForImage(i));
+            	System.out.println(constructJSONForImage(i).toString());
+            } catch (JSONException e1) 
+        	{
+            	/*try {  
+            		System.out.println("Enumeration Error");
+            	obj.put("index", i);
+            	obj.put("e", constructJSONForEvent(e, e1.getMessage()));
+                // TODO Auto-generated catch block
+            	}
+            	catch(JSONException e2)
+            	{
+            		System.out.println("Enumeration Error");
+            		//TODO:handle this
+            	}*/
+            }
+        	j++;
+        }
+        try
+        {
+        obj.put("size", j);
+        }
+        catch(JSONException e)
+        {
+        	
+        }
+        return obj.toString();
+    }
 }
- 

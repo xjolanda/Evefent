@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -54,11 +56,6 @@ public class SampleDynamicInfoActivity extends Activity
             dbService = binder.getService(); //Store reference to the instance of the service that we bound to.
             dbBound = true;
 
-            //dbService.getAllEvents(); //Sample data request. TODO: Replace with appropriate calls to info that you want
-            //dbService.getSchedule(0);
-            dbService.addEvent(new Event(0, "SampleTestEvent", false));
-            dbService.updateEvent(5, new Event(0, "updatedEvent", false));
-            dbService.removeEvent(4);
             Toast.makeText(getApplicationContext(), "Database Services Requested", Toast.LENGTH_SHORT).show(); //TODO:Debug
         }
 
@@ -73,7 +70,7 @@ public class SampleDynamicInfoActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.sampledynamicinfoactivity);
 
         /*
         * The LocalBroadcastManager will register your activity as a listener for a specific message from DatabaseServices.
@@ -96,9 +93,31 @@ public class SampleDynamicInfoActivity extends Activity
         *        new IntentFilter(getApplicationContext().getResources().getString(R.string.EventGPSUpdateMessageEnumeratedMessage)));
         * */
         LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseProfileEnumerationMessageReceiver,
-            new IntentFilter(getApplicationContext().getResources().getString(R.string.EventArrayMessage)));
+                new IntentFilter(getApplicationContext().getResources().getString(R.string.EventArrayMessage)));
         LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseScheduleElementMessageReceiver,
                 new IntentFilter(getApplicationContext().getResources().getString(R.string.ScheduleElementMessage)));
+        LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseImageArrayMessageReceiver,
+                new IntentFilter(getApplicationContext().getResources().getString(R.string.ImageArrayMessage)));
+        LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseEventAddedMessageReceiver,
+                new IntentFilter(getApplicationContext().getResources().getString(R.string.AddedEventMessage)));
+        LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseEventRemovedMessageReceiver,
+                new IntentFilter(getApplicationContext().getResources().getString(R.string.RemovedEventMessage)));
+        LocalBroadcastManager.getInstance(this).registerReceiver(DatabaseEventUpdatedMessageReceiver,
+                new IntentFilter(getApplicationContext().getResources().getString(R.string.UpdatedEventMessage)));
+
+       /* setListAdapter(new ArrayAdapter<String>(this, R.layout., currentProfiles));
+
+        ListView listView = getListView();
+        listView.setTextFilterEnabled(true);
+
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // When clicked, show a toast with the TextView text
+                Toast.makeText(getApplicationContext(),
+                        ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+            }
+        });*/
 
     }
 
@@ -115,11 +134,30 @@ public class SampleDynamicInfoActivity extends Activity
         bindService(intent, dbConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void onRefreshEventsButtonPress() //Example situation in which you would bind to the service
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        if(dbBound)
+        {
+            unbindService(dbConnection);
+            dbBound = false;
+        }
+    }
+
+    public void testDBServices(View view) //Example situation in which you would bind to the service
     {
         //TODO: Include this code anytime you want to trigger onServiceConnected request code
-        Intent intent = new Intent(this, DatabaseServices.class);
-        bindService(intent, dbConnection, Context.BIND_AUTO_CREATE);
+        if(dbBound)
+        {
+            dbService.getAllEvents(); //Sample data request. TODO: Replace with appropriate calls to info that you want
+            dbService.addEvent(new Event(0, "SampleTestEvent", false));
+            dbService.updateEvent(5, new Event(0, "updatedEvent", false));
+            dbService.removeEvent(5);
+            dbService.getScrapedImages("http://www.cs.kzoo.edu/cs105/", true);
+        }
+
+        Toast.makeText(getApplicationContext(), "Testing", Toast.LENGTH_SHORT).show();//TODO:Debug
     }
 
     @Override
@@ -127,6 +165,7 @@ public class SampleDynamicInfoActivity extends Activity
     {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
+
         return true;
     }
 
@@ -159,19 +198,31 @@ public class SampleDynamicInfoActivity extends Activity
             //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
             ArrayList<Event> updatedProfiles = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.EventArrayMessage));
 
+            String output = "";
+
             if (updatedProfiles == null)
             {
+                output = "GET FAILURE";
                 Toast.makeText(context, "Reassembly Failure, Probable Extra Error", Toast.LENGTH_SHORT).show();//TODO:Debug
-            } else
+            }
+            else
             {
+                output = "GET PASS:\n";
                 Toast.makeText(context, "Reassembly Success", Toast.LENGTH_SHORT).show();//TODO:Debug
+
+
+                currentProfiles = updatedProfiles;
+
+                for (Event e : currentProfiles)
+                {
+                    Toast.makeText(context, "Event Created: " + e.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
+                    output += e.toString() + "\n\n";
+                }
             }
 
-            currentProfiles = updatedProfiles;
-            for (Event e : currentProfiles)
-            {
-                Toast.makeText(context, "Event Created: " + e.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
-            }
+
+            TextView textView = (TextView) findViewById(R.id.event_enumerate_text);
+            textView.setText(output);
 
             //TODO: Make sure to update the display after info has been updated
             /*
@@ -190,20 +241,26 @@ public class SampleDynamicInfoActivity extends Activity
             //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
             ArrayList<ScheduleElement> elements = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.ScheduleElementMessage));
 
+            String output = "";
+
             if (elements == null)
             {
                 Toast.makeText(context, "Reassembly Failure, Probable Extra Error", Toast.LENGTH_SHORT).show();//TODO:Debug
             } else
             {
                 Toast.makeText(context, "Reassembly Success", Toast.LENGTH_SHORT).show();//TODO:Debug
+
+
+                currentSchedule = elements;
+
+                for (ScheduleElement e : currentSchedule)
+                {
+                    Toast.makeText(context, "Schedule Element Created: " + e.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
+
+                }
             }
 
-            currentSchedule = elements;
 
-            for (ScheduleElement e : currentSchedule)
-            {
-                Toast.makeText(context, "Schedule Element Created: " + e.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
-            }
 
             //TODO: Make sure to update the display after info has been updated
             /*
@@ -213,4 +270,157 @@ public class SampleDynamicInfoActivity extends Activity
         }
     };
 
+    private BroadcastReceiver DatabaseImageArrayMessageReceiver = new BroadcastReceiver()
+{
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Toast.makeText(context, "Broadcast Received, Attempting Reassembly", Toast.LENGTH_SHORT).show();//TODO:Debug
+            //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
+            ArrayList<DatabaseServices.Image> images = intent.getParcelableArrayListExtra(context.getResources().getString(R.string.ImageArrayMessage));
+
+            String output = "";
+
+            if (images == null)
+            {
+                output = "SCRAPING FAILURE";
+                Toast.makeText(context, "Reassembly Failure, Probable Extra Error", Toast.LENGTH_SHORT).show();//TODO:Debug
+            }
+            else
+            {
+                output = "SCRAPING PASS:\n";
+                Toast.makeText(context, "Reassembly Success", Toast.LENGTH_SHORT).show();//TODO:Debug
+
+
+                for (DatabaseServices.Image i : images)
+                {
+                    Toast.makeText(context, "Image received: " + i.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
+                    output += i.toString() + "\n";
+                }
+            }
+
+            TextView textView = (TextView) findViewById(R.id.scraping_text);
+            textView.setText(output);
+
+            //TODO: Make sure to update the display after info has been updated
+            /*
+            * Example call to imaginary method:
+            * UpdateEventPictures(currentProfiles);
+            * */
+        }
+};
+
+    private BroadcastReceiver DatabaseEventUpdatedMessageReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Toast.makeText(context, "Broadcast Received, Attempting Reassembly", Toast.LENGTH_SHORT).show();//TODO:Debug
+            //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
+           Event event = intent.getParcelableExtra(context.getResources().getString(R.string.UpdatedEventMessage));
+
+            String output = "";
+
+            if (event == null)
+            {
+                output = "UPDATE FAILURE";
+                Toast.makeText(context, "Reassembly Failure, Probable Extra Error", Toast.LENGTH_SHORT).show();//TODO:Debug
+            }
+            else
+            {
+                output = "UPDATE PASS:\n";
+                Toast.makeText(context, "Reassembly Success", Toast.LENGTH_SHORT).show();//TODO:Debug
+
+                    Toast.makeText(context, "Event Created: " + event.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
+                    output += event.toString() + "\n";
+
+            }
+
+
+            TextView textView = (TextView) findViewById(R.id.event_update_text);
+            textView.setText(output);
+
+            //TODO: Make sure to update the display after info has been updated
+            /*
+            * Example call to imaginary method:
+            * UpdateEventPictures(currentProfiles);
+            * */
+        }
+    };
+
+    private BroadcastReceiver DatabaseEventRemovedMessageReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Toast.makeText(context, "Broadcast Received, Attempting Reassembly", Toast.LENGTH_SHORT).show();//TODO:Debug
+            //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
+            Event event = intent.getParcelableExtra(context.getResources().getString(R.string.RemovedEventMessage));
+
+            String output = "";
+
+            if (event == null)
+            {
+                output = "REMOVE FAILURE";
+                Toast.makeText(context, "Reassembly Failure, Probable Extra Error", Toast.LENGTH_SHORT).show();//TODO:Debug
+            }
+            else
+            {
+                output = "REMOVE PASS:\n";
+                Toast.makeText(context, "Reassembly Success", Toast.LENGTH_SHORT).show();//TODO:Debug
+
+                Toast.makeText(context, "Event Removed: " + event.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
+                output += event.toString() + "\n";
+
+            }
+
+
+            TextView textView = (TextView) findViewById(R.id.event_remove_text);
+            textView.setText(output);
+
+            //TODO: Make sure to update the display after info has been updated
+            /*
+            * Example call to imaginary method:
+            * UpdateEventPictures(currentProfiles);
+            * */
+        }
+    };
+
+    private BroadcastReceiver DatabaseEventAddedMessageReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Toast.makeText(context, "Broadcast Received, Attempting Reassembly", Toast.LENGTH_SHORT).show();//TODO:Debug
+            //TODO: Replace this line. Example: intent.getParcelable(context.getResources().getString(R.string.EventScheduleUpdateEnumeratedMessage));
+            Event event = intent.getParcelableExtra(context.getResources().getString(R.string.AddedEventMessage));
+
+            String output = "";
+
+            if (event == null)
+            {
+                output = "INSERT FAILURE";
+                Toast.makeText(context, "Reassembly Failure, Probable Extra Error", Toast.LENGTH_SHORT).show();//TODO:Debug
+            }
+            else
+            {
+                output = "INSERT PASS:\n";
+                Toast.makeText(context, "Reassembly Success", Toast.LENGTH_SHORT).show();//TODO:Debug
+
+                Toast.makeText(context, "Event Created: " + event.toString(), Toast.LENGTH_SHORT).show();//TODO:Debug
+                output += event.toString() + "\n";
+
+            }
+
+
+            TextView textView = (TextView) findViewById(R.id.event_add_text);
+            textView.setText(output);
+
+            //TODO: Make sure to update the display after info has been updated
+            /*
+            * Example call to imaginary method:
+            * UpdateEventPictures(currentProfiles);
+            * */
+        }
+    };
 }
