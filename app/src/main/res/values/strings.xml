@@ -4,12 +4,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="getEventUrl">http://LocalHost:8080/EvefentServer/eventoperations/getevent</string>
-    <string name="getAllEventsUrl">http://LocalHost:8080/EvefentServer/eventoperations/getallevents</string>
-    <string name="addEventURL">http://LocalHost:8080/EvefentServer/eventoperations/addevent</string>
-    <string name="updateEventURL">http://LocalHost:8080/EvefentServer/eventoperations/updateevent</string>
-    <string name="removeEventURL">http://LocalHost:8080/EvefentServer/eventoperations/removeevent</string>
-    <string name="scrapeImagesURL">http://LocalHost:8080/EvefentServer/webscraping/scrapeimages</string>
+    <string name="getEventUrl">http://146.113.112.19:80/EvefentServer/eventoperations/getevent</string>
+    <string name="getAllEventsUrl">http://146.113.112.19:80/EvefentServer/eventoperations/getallevents</string>
+    <string name="addEventURL">http://146.113.112.19:80/EvefentServer/eventoperations/addevent</string>
+    <string name="updateEventURL">http://146.113.112.19:80/EvefentServer/eventoperations/updateevent</string>
+    <string name="removeEventURL">http://146.113.112.19:80/EvefentServer/eventoperations/removeevent</string>
+    <string name="scrapeImagesURL">http://146.113.112.19:80/EvefentServer/webscraping/scrapeimages</string>
 
     <string name="Event_Name">event_name</string>
     <string name="Event_ID">event_id</string>

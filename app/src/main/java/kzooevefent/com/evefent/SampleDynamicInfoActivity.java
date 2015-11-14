@@ -152,8 +152,8 @@ public class SampleDynamicInfoActivity extends Activity
         {
             dbService.getAllEvents(); //Sample data request. TODO: Replace with appropriate calls to info that you want
             dbService.addEvent(new Event(0, "SampleTestEvent", false));
-            dbService.updateEvent(5, new Event(0, "updatedEvent", false));
-            dbService.removeEvent(5);
+            dbService.updateEvent(10, new Event(0, "updatedEvent", false));
+            dbService.removeEvent(10);
             dbService.getScrapedImages("http://www.cs.kzoo.edu/cs105/", true);
         }
 
