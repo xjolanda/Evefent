@@ -30,6 +30,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 <<<<<<< HEAD
+<<<<<<< HEAD
     compile files('libs/android-async-http-1.4.4.jar')
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
@@ -40,4 +41,8 @@ dependencies {
     compile "cz.msebera.android:httpclient:4.4.1.1"
 
 >>>>>>> Develop
+=======
+    compile 'com.android.support:appcompat-v7:23.0.1+'
+    compile files('libs/android-async-http-1.4.4.jar')
+>>>>>>> parent of 71d175c... Merge pull request #4 from Bokaj707/DatabaseDevelopment
 }
