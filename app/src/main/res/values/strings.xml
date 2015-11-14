@@ -4,16 +4,29 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="getEventUrl">http://192.168.1.98:8080/EvefentServer/eventprofile/geteventprofile</string>
-    <string name="getAllEventsUrl">http://192.168.1.98:8080/EvefentServer/eventprofile/geteventprofiles</string>
+    <string name="getEventUrl">http://146.113.112.19:80/EvefentServer/eventoperations/getevent</string>
+    <string name="getAllEventsUrl">http://146.113.112.19:80/EvefentServer/eventoperations/getallevents</string>
+    <string name="addEventURL">http://146.113.112.19:80/EvefentServer/eventoperations/addevent</string>
+    <string name="updateEventURL">http://146.113.112.19:80/EvefentServer/eventoperations/updateevent</string>
+    <string name="removeEventURL">http://146.113.112.19:80/EvefentServer/eventoperations/removeevent</string>
+    <string name="scrapeImagesURL">http://146.113.112.19:80/EvefentServer/webscraping/scrapeimages</string>
 
-    <string name="EventProfile_Name">event_name</string>
-    <string name="EventProfile_ID">event_id</string>
-    <string name="EventProfile_AttendeesListID">event_attendeesListID</string>
-    <string name="EventProfile_Validated">validated</string>
+    <string name="Event_Name">event_name</string>
+    <string name="Event_ID">event_id</string>
+    <string name="Event_AttendeesListID">event_attendeesListID</string>
+    <string name="Event_Validated">validated</string>
 
-    <string name="EventProfilesEnumeratedMessage">EventProfilesEnumerated</string>
-    <string name="EventUpdatedMessage">EventUpdated</string>
+    <string name="Image_Source">image_source</string>
+    <string name="Image_Name">image_name</string>
+
+    <string name="EventArrayMessage">EventArray</string>
+    <string name="ImageArrayMessage">ImageArray</string>
+    <string name="EventMessage">Event</string>
+    <string name="GPSCoordsMessage">GPSCoords</string>
+    <string name="ScheduleElementMessage">SchdeulElement</string>
+    <string name="RemovedEventMessage">EventRemoved</string>
+    <string name="AddedEventMessage">AddedEvent</string>
+    <string name="UpdatedEventMessage">UpdatedEvent</string>
 
     <string name="Regis">Register</string>
     <string name="RegisterCode">Enter registration code</string>
