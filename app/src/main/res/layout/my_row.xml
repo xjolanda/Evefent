@@ -6,14 +6,10 @@
     android:gravity="center_horizontal"
     android:weightSum="1" >
 
-    <ImageView
-        android:id="@+id/myImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <TextView
         android:id="@+id/myText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world"/>
 
 </TableRow>

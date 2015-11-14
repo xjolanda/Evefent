@@ -102,11 +102,18 @@ public class AttendeeList extends Activity {
         //bindService(intent, dbConnection, Context.BIND_AUTO_CREATE);
         BufferedReader buf;
         ArrayList<String> lines = new ArrayList<String>();
+        lines.add("Tommy Pickles");
+        lines.add("Dil Pickles");
+        lines.add("Chuckie Finster");
+        lines.add("Phil Deville");
+        lines.add("Lil Deville");
+        lines.add("Angelica Pickles");
+
         System.out.println("Starting");
 
-        try
+        /*try
         {
-            buf = new BufferedReader(new FileReader("AttendeeList.txt"));
+            buf = new BufferedReader(new FileReader("assets\\AttendeeList.txt"));
             try
             {
                 String temp="";
@@ -125,7 +132,7 @@ public class AttendeeList extends Activity {
         catch(FileNotFoundException e)
         {
             System.out.println("File not found");
-        }
+        }*/
 
         //EventProfile eve = updateEventProfile(ID);
 
@@ -137,9 +144,12 @@ public class AttendeeList extends Activity {
 
             LayoutInflater inflater = LayoutInflater.from(AttendeeList.this);
             row = (TableRow) inflater.inflate(R.layout.my_row, null);
+            System.out.println("row: " + row);
             final String name = lines.get(i);
+            System.out.println(name);
 
             TextView text = (TextView) findViewById(R.id.myText);
+            System.out.println("text: " + text);
             text.setText(name);
             table.addView(row);
         }
