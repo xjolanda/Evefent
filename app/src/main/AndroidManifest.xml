@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="kzooevefent.com.evefent" >
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,24 +9,44 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".RegistrationScreen"
-            android:label="RegistrationScreen">
+        android:theme="@style/AppTheme"
+        android:debuggable="true">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".RegistrationScreen"
+            android:label="RegistrationScreen" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN">
+                <action android:name="android.intent.action.MAIN" >
                 </action>
-                <category android:name="android.intent.category.LAUNCHER"></category>
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SampleDynamicInfoActivity"
+            android:label="SampleDynamicInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".SampleDynamicInfoActivity"
-            android:label="SampleDynamicInfoActivity"></activity>
-
-        <service android:name=".DatabaseServices"
-                 android:enabled="true"
-                 android:exported="true">
+        <service
+            android:name=".DatabaseServices"
+            android:enabled="true"
+            android:exported="true" >
         </service>
 
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".AttendeeList"
+            android:label="@string/title_activity_attendee_list"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

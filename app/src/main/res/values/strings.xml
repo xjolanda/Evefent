@@ -17,5 +17,7 @@
 
     <string name="Regis">Register</string>
     <string name="RegisterCode">Enter registration code</string>
+    <string name="facebook_app_id">FacebookActivity</string>
+    <string name="title_activity_attendee_list">AttendeeList</string>
 
 </resources>

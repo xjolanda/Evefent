@@ -18,6 +18,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
 import java.util.ArrayList;
 
 
@@ -28,6 +36,7 @@ public class RegistrationScreen extends Activity {
     ArrayList<EventProfile> currentProfiles = new ArrayList<EventProfile>();
     DatabaseServices dbService; //The database service instance the activity binds to.
     boolean dbBound = false; //Is the activity bound to the service
+    CallbackManager callbackManager;
 
     private ServiceConnection dbConnection = new ServiceConnection()
     {
@@ -56,10 +65,35 @@ public class RegistrationScreen extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("hellooo");
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_registration_screen);
         Reg = (EditText) findViewById(R.id.Reg);
         Reg.setBackgroundColor(Color.parseColor("#734C8F"));
         System.out.println("Do the second thing");
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        final Toast successfulToast = Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG);
+                        successfulToast.show();
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
 
         /*
         * The LocalBroadcastManager will register your activity as a listener for a specific message from DatabaseServices.
@@ -139,6 +173,9 @@ public class RegistrationScreen extends Activity {
                 final Toast successToast = Toast.makeText(getApplicationContext(), "Call main event activity for event " + currentProfiles.get(i).getName(), Toast.LENGTH_LONG);
                 successToast.show();
                 found=true;
+                /*Intent intent = new Intent(this, AttendeeListActivity);
+                Bundle extras = intent.getExtras();
+                extras.putInt("regCode", Integer.parseInt(regEvent));*/
                 break;
             }
         }
@@ -183,4 +220,10 @@ public class RegistrationScreen extends Activity {
             * */
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }

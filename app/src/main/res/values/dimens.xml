@@ -5,4 +5,5 @@
 
     <dimen name="reg_top_vertical_margin">128dp</dimen>
     <dimen name="reg_activity_vertical_margin">72dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
