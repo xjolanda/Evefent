@@ -4,9 +4,15 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
+        buildTypes {
+            debug {
+                debuggable true
+            }
+        }
+
     defaultConfig {
         applicationId "kzooevefent.com.evefent"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -18,11 +24,20 @@ android {
         }
     }
 }
-
+repositories {
+    mavenCentral()
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+<<<<<<< HEAD
+    compile files('libs/android-async-http-1.4.4.jar')
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+=======
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile files('libs/android-async-http-1.4.9.jar')
     compile "cz.msebera.android:httpclient:4.4.1.1"
 
+>>>>>>> Develop
 }
