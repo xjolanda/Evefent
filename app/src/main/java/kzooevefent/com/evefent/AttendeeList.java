@@ -146,8 +146,8 @@ public class AttendeeList extends Activity {
             row = (TableRow) inflater.inflate(R.layout.my_row, null);
             System.out.println("row: " + row);
             final String name = lines.get(i);
-            System.out.println(name);
 
+            setContentView(R.layout.my_row);
             TextView text = (TextView) findViewById(R.id.myText);
             System.out.println("text: " + text);
             text.setText(name);
