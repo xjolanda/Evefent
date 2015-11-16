@@ -22,4 +22,7 @@
     <string name="facebook_app_id">FacebookActivity</string>
     <string name="title_activity_attendee_list">AttendeeList</string>
 
+    <string name="name_hint">Enter Your Name</string>
+    <string name="attendee_button">Add Your Name To The List</string>
+
 </resources>
