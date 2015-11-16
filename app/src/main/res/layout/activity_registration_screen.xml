@@ -9,8 +9,8 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".RegistrationScreen">
 
     <EditText
-        android:id="@+id/Reg"
-        android:hint="@string/RegisterCode"
+        android:id="@+id/Name"
+        android:hint="@string/name_hint"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -18,21 +18,12 @@
         />
 
     <Button
-        android:text="@string/Regis"
+        android:text="@string/attendee_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:onClick="searchEvents"
+        android:onClick="addName"
         />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
 
 </RelativeLayout>

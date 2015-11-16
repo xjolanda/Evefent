@@ -157,15 +157,4 @@ public class AttendeeList extends Activity {
             table.addView(row, i+1);
         }
     }
-
-    public void addName(View view)
-    {
-        EditText names;
-        names = (EditText) findViewById(R.id.Name);
-        String name = names.getText().toString();
-        names.setBackgroundColor(Color.parseColor("#734C8F"));
-
-        final Toast addNameToast = Toast.makeText(getApplicationContext(), "Add " + name + " to list", Toast.LENGTH_LONG);
-        addNameToast.show();
-    }
 }
