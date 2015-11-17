@@ -1,8 +1,11 @@
 package kzooevefent.com.evefent;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,9 +13,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -20,10 +25,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends FragmentActivity
         implements OnMapReadyCallback{
     LatLng eventLoc;
-    String desc;
+    String address;
     String eventName;
     Bundle info = getIntent().getExtras();
-
+    LatLng KzooSW = new LatLng(42.2889, -85.6039);
+    LatLng KzooNE = new LatLng(42.2917, -85.5961);
     //TODO: KEY NAMES
 
 
@@ -37,12 +43,17 @@ public class MapActivity extends FragmentActivity
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map1);
         mapFragment.getMapAsync(this);
-        int[] locArray = info.getIntArray("TEST");
-       // eventLoc = new LatLng(locArray[0], locArray[1]);
-        eventLoc = new LatLng(42.295, -85.8);
-        desc = info.getString("desc");
-        eventName = info.getString("name");
+       //If the info bundle isn't null, all requisite variables are updated.
+         if (info != null) {
+          int[] locArray = info.getIntArray("TEST");
+           eventLoc = new LatLng(locArray[0], locArray[1]);
 
+           address = info.getString("desc");
+           eventName = info.getString("name");
+            }
+     /*   eventLoc = new LatLng(42.295, -85.8);
+        address = "idfk";
+        eventName = "test"; */
     }
 
 
@@ -67,20 +78,43 @@ public class MapActivity extends FragmentActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*
+    onMapReady: When the map is created, this method acts on it to produce the markers we want. It binds the viewport to kalamazoo
+    college as closely as possible.
+    @parameters:
+       GoogleMap map - the map object itself
+     */
     @Override
     public void onMapReady(GoogleMap map) {
-      LatLngBounds.Builder  boundsBuild = new LatLngBounds.Builder();
-        boundsBuild.include(eventLoc);
-        boundsBuild.include(kalamazoo);
-        //sets a marker at kalamazoo college and moves the camera there.
-        LatLngBounds bounds = boundsBuild.build();
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
-        map.addMarker(new MarkerOptions()
-                .position(eventLoc)
-                .title(eventName));
-        map.addMarker(new MarkerOptions()
-                 .position(kalamazoo));
-        CameraUpdateFactory.newLatLng(eventLoc);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+        } else {
+            // Show rationale and request permission.
+        }
+      //this code dynamically resizes the map to include kalamazoo college & the event
+        LatLngBounds basicBound = new LatLngBounds(KzooSW, KzooNE);
+        if (!basicBound.contains(eventLoc)) {
+            LatLngBounds.Builder boundsBuild = new LatLngBounds.Builder();
+            boundsBuild.include(KzooNE);
+            boundsBuild.include(KzooSW);
+            boundsBuild.include(eventLoc);
+            //sets a marker at kalamazoo college and moves the camera there.
+            LatLngBounds bounds = boundsBuild.build();
+
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0));
+        }
+        else {
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(basicBound, 0));
+        }
+      Marker eventMark =  map.addMarker(new MarkerOptions()
+              .position(eventLoc)
+                .title(eventName)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                .snippet(address));
+        eventMark.showInfoWindow();
+
     }
 
 }
