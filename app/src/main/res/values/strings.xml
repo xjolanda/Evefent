@@ -24,5 +24,7 @@
 
     <string name="name_hint">Enter Your Name</string>
     <string name="attendee_button">Add Your Name To The List</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

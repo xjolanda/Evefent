@@ -7,11 +7,10 @@
 
     <application
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:debuggable="true">
-
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".RegistrationScreen"
             android:label="RegistrationScreen" >
@@ -32,9 +31,20 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
         <activity
             android:name=".AttendeeList"
             android:label="@string/title_activity_attendee_list"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".ListActivity"
+            android:label="@string/title_activity_list"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
