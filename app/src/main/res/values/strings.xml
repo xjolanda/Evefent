@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Evefent</string>
 
+    <string name="app_name">Evefent</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -32,5 +33,7 @@
     <string name="RegisterCode">Enter registration code</string>
     <string name="facebook_app_id">FacebookActivity</string>
     <string name="title_activity_attendee_list">AttendeeList</string>
+    <string name="title_activity_map" />
+
 
 </resources>
