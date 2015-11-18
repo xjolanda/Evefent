@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <kzooevefent.com.evefent.SlidingTabLayout
+    <com.mycompany.eventf.SlidingTabLayout
         android:id="@+id/sliding_tabs"
         android:background="#FFFFFF"
         android:layout_width="match_parent"

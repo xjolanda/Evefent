@@ -7,12 +7,23 @@
     <string name="getEventUrl">http://192.168.1.98:8080/EvefentServer/eventprofile/geteventprofile</string>
     <string name="getAllEventsUrl">http://192.168.1.98:8080/EvefentServer/eventprofile/geteventprofiles</string>
 
+    <string name="EventProfile_Time">event_time</string>
+    <string name="EventProfile_Location">event_location</string>
+
     <string name="EventProfile_Name">event_name</string>
     <string name="EventProfile_ID">event_id</string>
     <string name="EventProfile_AttendeesListID">event_attendeesListID</string>
     <string name="EventProfile_Validated">validated</string>
 
+    <string name="EventArrayMessage">EvenArray</string>
+    <string name="EventMessage">Event</string>
+    <string name="GPSCoordsMessage">GPSCoords</string>
+    <string name="ScheduleElementMessage">SchdeuleElement</string>
+
     <string name="EventProfilesEnumeratedMessage">EventProfilesEnumerated</string>
     <string name="EventUpdatedMessage">EventUpdated</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

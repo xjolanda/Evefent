@@ -1,5 +1,6 @@
 package kzooevefent.com.evefent;
 
+
 /*
  * Copyright 2014 Google Inc. All rights reserved.
  *
@@ -16,19 +17,22 @@ package kzooevefent.com.evefent;
  * limitations under the License.
  */
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.TextView;
+        import android.annotation.SuppressLint;
+        import android.content.Context;
+        import android.graphics.Typeface;
+        import android.os.Build;
+        import android.support.v4.view.PagerAdapter;
+        import android.support.v4.view.ViewPager;
+        import android.util.AttributeSet;
+        import android.util.SparseArray;
+        import android.util.TypedValue;
+        import android.view.Gravity;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.HorizontalScrollView;
+        import android.widget.LinearLayout;
+        import android.widget.TextView;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
@@ -199,7 +203,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     private void populateTabStrip() {
         final PagerAdapter adapter = mViewPager.getAdapter();
-        final OnClickListener tabClickListener = new TabClickListener();
+        final View.OnClickListener tabClickListener = new TabClickListener();
 
         for (int i = 0; i < adapter.getCount(); i++) {
             View tabView = null;
@@ -302,7 +306,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     }
 
-    private class TabClickListener implements OnClickListener {
+    private class TabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             for (int i = 0; i < mTabStrip.getChildCount(); i++) {

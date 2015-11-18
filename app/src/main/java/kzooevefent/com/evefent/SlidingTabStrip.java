@@ -1,5 +1,6 @@
 package kzooevefent.com.evefent;
 
+
 /*
  * Copyright 2014 Google Inc. All rights reserved.
  *
@@ -16,15 +17,17 @@ package kzooevefent.com.evefent;
  * limitations under the License.
  */
 
-import android.R;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.View;
-import android.widget.LinearLayout;
+        import android.R;
+        import android.content.Context;
+        import android.graphics.Canvas;
+        import android.graphics.Color;
+        import android.graphics.Paint;
+        import android.os.Bundle;
+        import android.support.v4.view.ViewPager;
+        import android.util.AttributeSet;
+        import android.util.TypedValue;
+        import android.view.View;
+        import android.widget.LinearLayout;
 
 class SlidingTabStrip extends LinearLayout {
 

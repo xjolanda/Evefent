@@ -1,5 +1,6 @@
 package kzooevefent.com.evefent;
 
+
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
@@ -33,15 +34,15 @@ public class TabsPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         // Inflate a new layout from our resources
         View view=null;
-        if(position==0){
+        if(position%2==0){
             view = activity.getLayoutInflater().inflate(R.layout.fragmet_layout1,container, false);
-        }else if (position==1){
+        }else if (position%2==1){
             view = activity.getLayoutInflater().inflate(R.layout.fragmet_layout2,container, false);
-        }else if (position==2){
+        }else if (position%2==2){
             view = activity.getLayoutInflater().inflate(R.layout.fragmet_layout3,container, false);
-        }else if (position==3){
+        }else if (position%2==3){
             view = activity.getLayoutInflater().inflate(R.layout.fragmet_layout4,container, false);
-        }else if (position==4){
+        }else if (position%2==4){
             view = activity.getLayoutInflater().inflate(R.layout.fragmet_layout5,container, false);
         }
 
