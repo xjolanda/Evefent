@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_table"
-    android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:stretchColumns="1"
+    android:layout_width="match_parent"
     android:background="@color/background">
-</TableLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/list_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="1">
+        </TableLayout>
+
+    </ScrollView>
+</RelativeLayout>
