@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Evefent</string>
@@ -14,6 +13,11 @@
     <string name="EventProfile_ID">event_id</string>
     <string name="EventProfile_AttendeesListID">event_attendeesListID</string>
     <string name="EventProfile_Validated">validated</string>
+
+    <string name="EventArrayMessage">EvenArray</string>
+    <string name="EventMessage">Event</string>
+    <string name="GPSCoordsMessage">GPSCoords</string>
+    <string name="ScheduleElementMessage">SchdeuleElement</string>
 
     <string name="EventProfilesEnumeratedMessage">EventProfilesEnumerated</string>
     <string name="EventUpdatedMessage">EventUpdated</string>
